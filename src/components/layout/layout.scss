@@ -1,0 +1,40 @@
+@use "../../styles/variables" as *;
+
+.app-layout {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text-primary);
+  transition: $transition-normal;
+}
+
+.app-header {
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.app-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.theme-toggle {
+  padding: 8px 16px;
+  border-radius: $radius-sm;
+  border: none;
+  cursor: pointer;
+  background: var(--primary);
+  color: white;
+  font-weight: 500;
+  transition: $transition-fast;
+  box-shadow: $shadow-sm;
+
+  &:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+  }
+}
