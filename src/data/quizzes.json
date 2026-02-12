@@ -1,0 +1,55 @@
+[
+  {
+    "id": "js-basics",
+    "title": "JavaScript Basics",
+    "description": "Test your fundamentals of JavaScript",
+    "duration": 3,
+    "pointsPerQuestion": 1,
+    "questions": [
+      {
+        "id": 1,
+        "question": "Which keyword is used to declare a variable?",
+        "options": ["var", "let", "const", "All of these"],
+        "correctAnswer": 3
+      },
+      {
+        "id": 2,
+        "question": "Which method converts JSON to an object?",
+        "options": [
+          "JSON.parse()",
+          "JSON.stringify()",
+          "JSON.convert()",
+          "JSON.toObject()"
+        ],
+        "correctAnswer": 0
+      }
+    ]
+  },
+
+  {
+    "id": "GK-Easy",
+    "title": "General Knowledge Quiz",
+    "description": "Test your General Knowledge for Know-IT-alls",
+    "duration": 5,
+    "pointsPerQuestion": 1,
+    "questions": [
+      {
+        "id": 1,
+        "question": "Which element is said to keep bones strong?",
+        "options": ["Carbon", "Nitrogen", "Calcium", "Oxygen"],
+        "correctAnswer": 2
+      },
+      {
+        "id": 2,
+        "question": "In which country is the Taj Mahal situated?",
+        "options": [
+          "Japan",
+          "India",
+          "Germany",
+          "Switzerland"
+        ],
+        "correctAnswer": 1
+      }
+    ]
+  }
+]

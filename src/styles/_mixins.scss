@@ -1,0 +1,32 @@
+@mixin flex-itemCenter-justifyCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin respond($breakpoint) {
+  @if $breakpoint == mobile {
+    @media (max-width: 480px) { @content; }
+  }
+  @if $breakpoint == tablet {
+    @media (max-width: 768px) { @content; }
+  }
+  @if $breakpoint == desktop {
+    @media (min-width: 1024px) { @content; }
+  }
+}
+
+@mixin button-style($bg, $color) {
+  background: $bg;
+  color: $color;
+  padding: 12px 20px;
+  border-radius: $radius-md;
+  border: none;
+  cursor: pointer;
+  transition: $transition-normal;
+
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+}

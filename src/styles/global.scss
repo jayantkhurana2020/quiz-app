@@ -1,0 +1,51 @@
+@use "./variables" as *;
+@use "./mixins" as *;
+@use "./breakpoints" as *;
+
+:root {
+  --bg: #ffffff;
+  --surface: #f8fafc;
+  --card: #ffffff;
+  --border: #e2e8f0;
+
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+
+  --danger: #ef4444;
+}
+
+.dark {
+  --bg: #0f172a;
+  --surface: #111827;
+  --card: #1e293b;
+  --border: #2d3748;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+
+  --primary: #6366f1;
+  --primary-hover: #7c82ff;
+
+  --danger: #ef4444;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
