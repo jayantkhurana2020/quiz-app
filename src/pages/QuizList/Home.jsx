@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import quizzes from "../../data/quizzes.json";
+import Card from "../../components/ui/Card/Card.jsx";
 import "./Home.css";
 import Quiz from "../QuizAttempt/Quiz"
 import InstructionsModal from "../../components/InstructionsModal/InstructionsModal";
@@ -35,17 +36,19 @@ export default function Home() {
         <div className="quiz-list-wrapper">
           {filteredQuizzes.length === 0 && <p>No quizzes found.</p>}
           <ol className="quiz-list">
-            {filteredQuizzes.map((quiz) => (
+            {filteredQuizzes.map((quiz, index) => (
+              <Card hover key={index}>
+                <li 
+                  key={quiz.id}
+                  onClick={() => {
+                    setSelectedQuiz(quiz);
+                    setShowModal(true);
+                  }}
+                >
+                  <strong>{quiz.title}</strong> — {quiz.description}
+                </li>
 
-              <li 
-                key={quiz.id}
-                onClick={() => {
-                  setSelectedQuiz(quiz);
-                  setShowModal(true);
-                }}
-              >
-                <strong>{quiz.title}</strong> — {quiz.description}
-              </li>
+              </Card>
             ))}
           </ol>
         </div>

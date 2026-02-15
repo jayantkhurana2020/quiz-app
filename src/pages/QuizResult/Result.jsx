@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import Card from "../../components/ui/Card/Card";
 import "./Result.css"
 
 function Result() {
@@ -22,23 +23,26 @@ function Result() {
 
   return (
     <div className="result-container">
-      <h1>Quiz Completed 🎉</h1>
+      <Card>
 
-      <div className="result-score">
-        <h2>
-          You scored {score} / {total}
-        </h2>
-      </div>
+        <h1>Quiz Completed 🎉</h1>
 
-      <div className="result-actions">
-        <button onClick={handleReattempt} className="result-btn primary">
-          Reattempt Quiz
-        </button>
+        <div className="result-score">
+          <h2>
+            You scored {score} / {total}
+          </h2>
+        </div>
 
-        <button onClick={handleHome} className="result-btn">
-          Back to Home
-        </button>
-      </div>
+        <div className="result-actions">
+          <button onClick={handleReattempt} className="result-btn primary">
+            Reattempt Quiz
+          </button>
+
+          <button onClick={handleHome} className="result-btn">
+            Back to Home
+          </button>
+        </div>
+      </Card>
     </div>
   );
 }

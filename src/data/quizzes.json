@@ -3,7 +3,7 @@
     "id": "js-basics",
     "title": "JavaScript Basics",
     "description": "Test your fundamentals of JavaScript",
-    "duration": 3,
+    "duration": 30,
     "pointsPerQuestion": 1,
     "questions": [
       {

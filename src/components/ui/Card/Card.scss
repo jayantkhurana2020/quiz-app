@@ -1,0 +1,26 @@
+@use "../../../styles/variables" as *;
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: $radius-md;
+  box-shadow: $shadow-sm;
+  transition: $transition-normal;
+
+  &-sm {
+    padding: 12px;
+  }
+
+  &-md {
+    padding: 20px;
+  }
+
+  &-lg {
+    padding: 32px;
+  }
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: $shadow-md;
+}

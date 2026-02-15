@@ -3,7 +3,10 @@ import { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
 import quizzes from "../../data/quizzes.json";
 import useQuizGuard from "../../hooks/useQuizGuard.js";
-import "./Quiz.css";
+import Container from "../../components/ui/Container/Container.jsx";
+import Card from "../../components/ui/Card/Card";
+import Button from "../../components/ui/Button/Button";
+import "./Quiz.scss";
 
 export default function Quiz() {
   useQuizGuard();
@@ -15,13 +18,13 @@ export default function Quiz() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState({});
-
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-
   const [timeLeft, setTimeLeft] = useState(quiz ? quiz.duration * 60 : 0);
-  const endTimeRef = useRef(null);
+  const [isAnimating, setIsAnimating] = useState(false);
 
+
+  const endTimeRef = useRef(null);
 
   if (!quiz) {
     return <p className="quiz-error">Quiz not found</p>;
@@ -29,60 +32,57 @@ export default function Quiz() {
 
   const currentQuestion = quiz.questions[currentIndex];
 
-//   timer effect
+  const questionsProgressPercentage =
+    ((currentIndex + 1) / quiz.questions.length) * 100;
+
+    const totalSeconds = quiz.duration * 60;
+    const timerProgressPercent = (timeLeft / totalSeconds) * 100;
+
+    const unansweredCount = quiz.questions.length - Object.keys(answers).length;
 
   useEffect(() => {
-
     if (!quiz || submitted) return;
 
     if (!endTimeRef.current) {
-        endTimeRef.current = Date.now() + quiz.duration * 60 * 1000;
+      endTimeRef.current = Date.now() + quiz.duration * 60 * 1000;
     }
 
     const interval = setInterval(() => {
-        const remaining = Math.max(
-            0,
-            Math.floor((endTimeRef.current - Date.now()) / 1000)
-        );
+      const remaining = Math.max(
+        0,
+        Math.floor((endTimeRef.current - Date.now()) / 1000)
+      );
 
-        setTimeLeft(remaining);
+      setTimeLeft(remaining);
 
-        if (remaining === 120) {
-            toast.warning("Only 2 minutes left!");
-        }
+      if (remaining === 120) {
+        toast.warning("Only 2 minutes left!");
+      }
 
-        if (remaining === 0) {
-            clearInterval(interval);
-            handleAutoSubmit();
-        }
-
+      if (remaining === 0) {
+        clearInterval(interval);
+        handleAutoSubmit();
+      }
     }, 1000);
 
     return () => clearInterval(interval);
   }, [quiz, submitted]);
 
-
-  function handleOptionSelect (optionIndex) {
+  function handleOptionSelect(optionIndex) {
     setAnswers((prev) => ({
-        ...prev,
-        [currentQuestion.id]: optionIndex
+      ...prev,
+      [currentQuestion.id]: optionIndex,
     }));
   }
 
   function calculateScore() {
     let score = 0;
-
     quiz.questions.forEach((question) => {
       if (answers[question.id] === question.correctAnswer) {
         score += 1;
       }
     });
-
     return score;
-  }
-
-  function handleSubmitClick() {
-    setShowSubmitModal(true);
   }
 
   function handleAutoSubmit() {
@@ -105,11 +105,13 @@ export default function Quiz() {
     setShowSubmitModal(false);
     sessionStorage.removeItem("quizActive");
 
-    navigate("/result", {state: {
+    navigate("/result", {
+      state: {
         score,
         total: quiz.questions.length,
-        quizId: quiz.id
-    }});
+        quizId: quiz.id,
+      },
+    });
   }
 
   function formatTime(seconds) {
@@ -118,105 +120,135 @@ export default function Quiz() {
     return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
   }
 
+  function changeQuestion(newIndex) {
+  if (newIndex < 0 || newIndex >= quiz.questions.length) return;
 
-  return (
-    <div className="quiz-container">
+  setIsAnimating(true);
 
-        <header className="quiz-header">
-            <h1 className="quiz-title">{quiz.title}</h1>
-
-            <div className="quiz-top-bar">
-                <p className="quiz-progress"> Question {currentIndex + 1} of {quiz.questions.length}</p>
-
-                <div className={`quiz-timer ${timeLeft <= 120 ? "warning" : ""}`}>
-                    ⏳ {formatTime(timeLeft)}
-                </div>
-            </div>
-        </header>
-
-        <section className="quiz-question">
-            <h3 className="question-text">{currentQuestion.question}</h3>
-        </section>
-
-        <ul className="quiz-options">
-            {currentQuestion.options.map((option, index) => (
-                <li key={index} className="quiz-option">
-
-                    <label className="option-label">
-
-                        <input 
-                            type="radio"
-                            className="option-input"
-                            name={`question-${currentQuestion.id}`}
-                            checked={answers[currentQuestion.id] === index}
-                            onChange={() => handleOptionSelect(index)}
-                        />
-
-                        <span className="option-text">{option}</span>
-
-                    </label>
-                </li>
-            ))}
-        </ul>
-        
-        <div className="quiz-navigation">
-
-            <button className="nav-button"
-                onClick={() => setCurrentIndex((i) => i - 1)}
-                disabled={currentIndex === 0}
-            >
-                Prev 
-            </button>
-
-            <button
-                className="nav-button primary"
-                onClick={() => setCurrentIndex((i) => i + 1)}
-                disabled={currentIndex === quiz.questions.length - 1}
-            >
-                Next
-            </button>
-        </div>
-
-        <div className="quiz-submit">
-            <button
-            className="submit-button"
-            onClick={handleSubmitClick}
-            disabled={submitted}
-            >
-            Submit Quiz
-            </button>
-      </div>
-
-       {showSubmitModal && (
-            <div className="modal-overlay">
-                <div className="modal">
-                    <h2>Submit Quiz?</h2>
-                    <p>
-                        You won’t be able to change your answers after submitting.
-                        Are you sure you want to continue?
-                    </p>
-
-                    <div className="modal-actions">
-                    <button
-                        className="modal-btn cancel"
-                        onClick={() => setShowSubmitModal(false)}
-                    >
-                        Cancel
-                    </button>
-
-                    <button
-                        className="modal-btn confirm"
-                        onClick={handleConfirmSubmit}
-                    >
-                        Yes, Submit
-                    </button>
-                    </div>
-                </div>
-            </div>
-        )}
-
-    </div>
-  );
+  setTimeout(() => {
+    setCurrentIndex(newIndex);
+    setIsAnimating(false);
+  }, 200);
 }
 
 
+  return (
+    <Container>
+      <div className="quiz-wrapper">
+
+        {/*Progress Bar*/}
+        <div className="quiz-progress-bar-wrapper">
+          <div
+            className="quiz-progress-bar"
+            style={{ width: `${questionsProgressPercentage}%` }}
+          />
+        </div>
+
+        <div className="quiz-top">
+          <h1 className="quiz-title">{quiz.title}</h1>
+
+          <div className="quiz-meta">
+            <span>{unansweredCount} Unanswered</span>
+            <span>
+              Question {currentIndex + 1} of {quiz.questions.length}
+            </span>
+
+            <div
+                className={`quiz-timer-circle`}
+                style={{
+                    background: `conic-gradient(
+                    var(${timeLeft <= 10 ? "--danger" : "--primary"}) ${timerProgressPercent}%,
+                    var(--border) ${timerProgressPercent}%
+                    )`,
+                }}
+            >
+                <div className="quiz-timer-inner"
+                style={{
+                    color:`var(${timeLeft <= 10 ? "--danger" : "--text-primary"})`
+                }}>
+                    {formatTime(timeLeft)}
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <Card padding="lg">
+          <div className={`question-container ${isAnimating ? "fade-out" : "fade-in"}`}>
+            <h2 className="question-text">
+              {currentQuestion.question}
+            </h2>
+
+            <div className="options-grid">
+              {currentQuestion.options.map((option, index) => (
+                <button
+                  key={index}
+                  className={`option-block ${
+                    answers[currentQuestion.id] === index ? "selected" : ""
+                  }`}
+                  onClick={() => handleOptionSelect(index)}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+          </div>
+        </Card>
+
+        <div className="quiz-navigation">
+          <Button
+            variant="outline"
+            onClick={() => changeQuestion(currentIndex - 1)}
+            disabled={currentIndex === 0}
+          >
+            Prev
+          </Button>
+
+          <Button
+            onClick={() => changeQuestion(currentIndex + 1)}
+            disabled={currentIndex === quiz.questions.length - 1}
+          >
+            Next
+          </Button>
+        </div>
+
+        <div className="quiz-submit">
+          <Button
+            variant="safe"
+            onClick={() => setShowSubmitModal(true)}
+            disabled={submitted}
+            fullWidth
+          >
+            Submit Quiz
+          </Button>
+        </div>
+
+        {showSubmitModal && (
+          <div className="modal-overlay">
+            <div className="modal">
+              <h2>Submit Quiz?</h2>
+              <p>
+                You won’t be able to change your answers after submitting.
+              </p>
+
+              <div className="modal-actions">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowSubmitModal(false)}
+                >
+                  Cancel
+                </Button>
+
+                <Button
+                  variant="danger"
+                  onClick={handleConfirmSubmit}
+                >
+                  Yes, Submit
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </Container>
+  );
+}

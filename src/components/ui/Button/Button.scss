@@ -1,0 +1,59 @@
+@use "../../../styles/variables" as *;
+
+.btn {
+  padding: 10px 18px;
+  border-radius: $radius-sm;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: $transition-fast;
+  box-shadow: $shadow-sm;
+
+   &:disabled {
+    visibility: hidden;
+  }
+
+  &-primary {
+    background: var(--primary);
+    color: white;
+
+    &:hover {
+      background: var(--primary-hover);
+    }
+  }
+
+  &-danger {
+    background: var(--danger);
+    color: white;
+
+     &:hover {
+      background: var(--danger-hover);
+    }
+  }
+
+  &-safe {
+    background: var(--safe);
+    color: white;
+
+     &:hover {
+      background: var(--safe-hover);
+    }
+  }
+
+  &-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+
+    &:hover{
+      background: var(--gray-hover);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+    }
+  }
+
+}
+
+.btn-full {
+  width: 100%;
+}
