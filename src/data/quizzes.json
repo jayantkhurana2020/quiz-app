@@ -3,7 +3,7 @@
     "id": "js-basics",
     "title": "JavaScript Basics",
     "description": "Test your fundamentals of JavaScript",
-    "duration": 30,
+    "duration": 3,
     "pointsPerQuestion": 1,
     "questions": [
       {
@@ -47,6 +47,44 @@
           "India",
           "Germany",
           "Switzerland"
+        ],
+        "correctAnswer": 1
+      }
+    ]
+  },
+
+  {
+    "id": "Cashier-Trivia",
+    "title": "Cashier Trivia Quiz",
+    "description": "Math and Vocabulary Test!",
+    "duration": 5,
+    "pointsPerQuestion": 1,
+    "questions": [
+      {
+        "id": 1,
+        "question": "Cashiers should always provide friendly",
+        "options": ["Denomination", "Orientation", "Customer service", "Money"],
+        "correctAnswer": 2
+      },
+      {
+        "id": 2,
+        "question": "A customer's order total is $2.06  The customer give you $100.00  What will the amount of the change you will give back?",
+        "options": [
+          "$92.94",
+          "$96.84",
+          "$98.00",
+          "$97.94"
+        ],
+        "correctAnswer": 3
+      },
+      {
+        "id": 3,
+        "question": "Customers who want to pay for their products should go to the",
+        "options": [
+          "Charge out",
+          "Checkout",
+          "Cash advance",
+          "Loan"
         ],
         "correctAnswer": 1
       }

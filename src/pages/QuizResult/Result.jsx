@@ -1,16 +1,20 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import Card from "../../components/ui/Card/Card";
-import "./Result.css"
+import "./Result.scss";
 
 function Result() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const {score, total, quizId} = location.state || {};
+  const { score, total, quizId } = location.state || {};
 
-  if(!location.state) {
+  if (!location.state) {
     return <p>No result data found.</p>;
   }
+
+  const percentage = Math.round((score / total) * 100);
+  const passThreshold = 50; // can be dynamic later
+  const isPassed = percentage >= passThreshold;
 
   function handleReattempt() {
     sessionStorage.setItem("quizActive", "true");
@@ -23,14 +27,22 @@ function Result() {
 
   return (
     <div className="result-container">
-      <Card>
-
-        <h1>Quiz Completed 🎉</h1>
+      <Card padding="lg">
+        <h1 className="result-title">
+          {isPassed ? "🎉 Congratulations!" : "📘 Keep Practicing!"}
+        </h1>
 
         <div className="result-score">
           <h2>
-            You scored {score} / {total}
+            {score} / {total}
           </h2>
+          <div className="result-percentage">
+            {percentage}%
+          </div>
+
+          <div className={`result-status ${isPassed ? "pass" : "fail"}`}>
+            {isPassed ? "PASSED" : "FAILED"}
+          </div>
         </div>
 
         <div className="result-actions">
