@@ -57,7 +57,7 @@
     "id": "Cashier-Trivia",
     "title": "Cashier Trivia Quiz",
     "description": "Math and Vocabulary Test!",
-    "duration": 5,
+    "duration": 1,
     "pointsPerQuestion": 1,
     "questions": [
       {

@@ -13,7 +13,7 @@ function Result() {
   }
 
   const percentage = Math.round((score / total) * 100);
-  const passThreshold = 50; // can be dynamic later
+  const passThreshold = 33;
   const isPassed = percentage >= passThreshold;
 
   function handleReattempt() {
@@ -34,7 +34,7 @@ function Result() {
 
         <div className="result-score">
           <h2>
-            {score} / {total}
+            You scored : {score} / {total}
           </h2>
           <div className="result-percentage">
             {percentage}%

@@ -1,0 +1,239 @@
+@use "../../styles/mixins" as *;
+
+/* Layout Variables (SCSS only) */
+$radius-xl: 24px;
+$radius-lg: 14px;
+$transition: 0.3s ease;
+
+
+/* ===============================
+   OVERLAY
+=================================*/
+
+.instructions-overlay {
+  position: fixed;
+  inset: 0;
+  padding: 24px;
+  z-index: 1000;
+
+  background: var(--overlay-bg);
+  backdrop-filter: blur(14px) saturate(140%);
+
+  @include flex-itemCenter-justifyCenter;
+  animation: fadeIn 0.35s ease forwards;
+}
+
+
+/* ===============================
+   MODAL
+=================================*/
+
+.instructions-modal {
+  width: 100%;
+  max-width: 560px;
+  padding: 36px;
+  border-radius: $radius-xl;
+  position: relative;
+
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+
+  box-shadow:
+    var(--modal-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  animation: scaleIn 0.35s cubic-bezier(.16,.84,.44,1) forwards;
+
+  /* HEADER */
+
+  .instructions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .quiz-title {
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+  }
+
+  .instructions-close {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+
+    background: var(--glass-surface);
+    color: var(--text-secondary);
+
+    transition: $transition;
+
+    @include flex-itemCenter-justifyCenter;
+
+    &:hover {
+      background: var(--glass-highlight);
+      transform: rotate(90deg);
+      color: var(--danger);
+    }
+  }
+
+  /* DESCRIPTION */
+
+  .quiz-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .instructions-divider {
+    height: 1px;
+    margin: 24px 0;
+    background: var(--divider-gradient);
+  }
+
+  /* META GRID */
+
+  .quiz-meta {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+
+    .meta-item {
+      padding: 14px;
+      border-radius: $radius-lg;
+      background: var(--glass-surface);
+      border: 1px solid var(--glass-surface-border);
+
+      display: flex;
+      gap: 12px;
+
+      transition: $transition;
+
+      span {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+      }
+
+      strong {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      &:hover {
+        transform: translateY(-4px);
+        background: var(--glass-highlight);
+      }
+    }
+  }
+
+  /* ACTIONS */
+
+  .instructions-actions {
+    margin-top: 32px;
+    display: flex;
+    gap: 16px;
+
+    .start-btn {
+      flex: 1;
+      padding: 14px;
+      border-radius: $radius-lg;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      color: white;
+
+      background: linear-gradient(
+        135deg,
+        var(--primary),
+        var(--primary-hover)
+      );
+
+      transition: $transition;
+
+      box-shadow: 0 10px 25px var(--primary-glow);
+
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px var(--primary-glow);
+      }
+    }
+
+    .cancel-btn {
+      flex: 1;
+      padding: 14px;
+      border-radius: $radius-lg;
+      cursor: pointer;
+      font-weight: 600;
+
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+
+      transition: $transition;
+
+      &:hover {
+        background: rgba(239, 68, 68, 0.1);
+        border-color: var(--danger);
+        color: var(--danger);
+      }
+    }
+  }
+}
+
+
+/* ===============================
+   ANIMATIONS
+=================================*/
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+
+/* ===============================
+   RESPONSIVE
+=================================*/
+
+@include respond(tablet) {
+  .instructions-modal {
+    padding: 28px;
+
+    .quiz-meta {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@include respond(mobile) {
+  .instructions-modal {
+    padding: 22px;
+    border-radius: 18px;
+
+    .quiz-title {
+      font-size: 1.5rem;
+    }
+
+    .instructions-actions {
+      flex-direction: column;
+    }
+  }
+}
