@@ -6,6 +6,7 @@ import Layout from "./components/layout/Layout.jsx";
 import Home from "./pages/QuizList/Home.jsx";
 import Quiz from "./pages/QuizAttempt/Quiz.jsx";
 import Result from "./pages/QuizResult/Result.jsx";
+import CreateQuiz from "./pages/CreateQuiz/CreateQuiz.jsx";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/quiz/:quizId" element={<Quiz />} />
           <Route path="/result" element={<Result />} />
+          <Route path="/create-quiz" element={<CreateQuiz />} />
         </Route>
       </Routes>
 

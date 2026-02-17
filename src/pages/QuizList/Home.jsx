@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import quizzes from "../../data/quizzes.json";
+import seedQuizzes from "../../data/quizzes.json";
+import { getStoredQuizzes } from "../../utils/storage.js";
 import Card from "../../components/ui/Card/Card.jsx";
 import InstructionsModal from "../../components/InstructionsModal/InstructionsModal";
 import "./Home.scss";
@@ -11,6 +12,7 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const quizzes = [...seedQuizzes, ...getStoredQuizzes()];
 
   const filteredQuizzes = quizzes.filter((quiz) =>
     quiz.title.toLowerCase().includes(search.toLowerCase()) ||

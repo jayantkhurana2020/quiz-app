@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
-import quizzes from "../../data/quizzes.json";
+import seedQuizzes from "../../data/quizzes.json";
+import { getStoredQuizzes } from "../../utils/storage.js";
 import useQuizGuard from "../../hooks/useQuizGuard.js";
 import Container from "../../components/ui/Container/Container.jsx";
 import Card from "../../components/ui/Card/Card";
@@ -14,6 +15,7 @@ export default function Quiz() {
   const { quizId } = useParams();
   const navigate = useNavigate();
 
+  const quizzes = [...seedQuizzes, ...getStoredQuizzes()];
   const quiz = quizzes.find((q) => q.id === quizId);
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -22,7 +24,6 @@ export default function Quiz() {
   const [submitted, setSubmitted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(quiz ? quiz.duration * 60 : 0);
   const [isAnimating, setIsAnimating] = useState(false);
-
 
   const endTimeRef = useRef(null);
 
@@ -35,10 +36,11 @@ export default function Quiz() {
   const questionsProgressPercentage =
     ((currentIndex + 1) / quiz.questions.length) * 100;
 
-    const totalSeconds = quiz.duration * 60;
-    const timerProgressPercent = (timeLeft / totalSeconds) * 100;
+  const totalSeconds = quiz.duration * 60;
+  const timerProgressPercent = (timeLeft / totalSeconds) * 100;
 
-    const unansweredCount = quiz.questions.length - Object.keys(answers).length;
+  const unansweredCount =
+    quiz.questions.length - Object.keys(answers).length;
 
   useEffect(() => {
     if (!quiz || submitted) return;
@@ -68,20 +70,30 @@ export default function Quiz() {
     return () => clearInterval(interval);
   }, [quiz, submitted]);
 
-  function handleOptionSelect(optionIndex) {
+  // ✅ Updated to use option.id
+  function handleOptionSelect(optionId) {
     setAnswers((prev) => ({
       ...prev,
-      [currentQuestion.id]: optionIndex,
+      [currentQuestion.id]: optionId,
     }));
   }
 
+  // ✅ Updated scoring logic
   function calculateScore() {
     let score = 0;
+
     quiz.questions.forEach((question) => {
-      if (answers[question.id] === question.correctAnswer) {
-        score += 1;
+      const selectedOptionId = answers[question.id];
+
+      const correctOption = question.options.find(
+        (option) => option.isCorrect
+      );
+
+      if (selectedOptionId === correctOption?.id) {
+        score += quiz.pointsPerQuestion || 1;
       }
     });
+
     return score;
   }
 
@@ -121,22 +133,21 @@ export default function Quiz() {
   }
 
   function changeQuestion(newIndex) {
-  if (newIndex < 0 || newIndex >= quiz.questions.length) return;
+    if (newIndex < 0 || newIndex >= quiz.questions.length) return;
 
-  setIsAnimating(true);
+    setIsAnimating(true);
 
-  setTimeout(() => {
-    setCurrentIndex(newIndex);
-    setIsAnimating(false);
-  }, 200);
-}
-
+    setTimeout(() => {
+      setCurrentIndex(newIndex);
+      setIsAnimating(false);
+    }, 200);
+  }
 
   return (
     <Container>
       <div className="quiz-wrapper">
 
-        {/*Progress Bar*/}
+        {/* Progress Bar */}
         <div className="quiz-progress-bar-wrapper">
           <div
             className="quiz-progress-bar"
@@ -154,40 +165,51 @@ export default function Quiz() {
             </span>
 
             <div
-                className={`quiz-timer-circle`}
-                style={{
-                    background: `conic-gradient(
-                    var(${timeLeft <= 10 ? "--danger" : "--primary"}) ${timerProgressPercent}%,
-                    var(--border) ${timerProgressPercent}%
-                    )`,
-                }}
+              className="quiz-timer-circle"
+              style={{
+                background: `conic-gradient(
+                  var(${timeLeft <= 10 ? "--danger" : "--primary"}) ${timerProgressPercent}%,
+                  var(--border) ${timerProgressPercent}%
+                )`,
+              }}
             >
-                <div className="quiz-timer-inner"
+              <div
+                className="quiz-timer-inner"
                 style={{
-                    color:`var(${timeLeft <= 10 ? "--danger" : "--text-primary"})`
-                }}>
-                    {formatTime(timeLeft)}
-                </div>
+                  color: `var(${timeLeft <= 10 ? "--danger" : "--text-primary"})`,
+                }}
+              >
+                {formatTime(timeLeft)}
+              </div>
             </div>
           </div>
         </div>
 
         <Card padding="lg">
-          <div className={`question-container ${isAnimating ? "fade-out" : "fade-in"}`}>
+          <div
+            className={`question-container ${
+              isAnimating ? "fade-out" : "fade-in"
+            }`}
+          >
+            {/* ✅ Updated question field */}
             <h2 className="question-text">
-              {currentQuestion.question}
+              {currentQuestion.questionText}
             </h2>
 
             <div className="options-grid">
-              {currentQuestion.options.map((option, index) => (
+              {currentQuestion.options.map((option) => (
                 <button
-                  key={index}
+                  key={option.id}
                   className={`option-block ${
-                    answers[currentQuestion.id] === index ? "selected" : ""
+                    answers[currentQuestion.id] === option.id
+                      ? "selected"
+                      : ""
                   }`}
-                  onClick={() => handleOptionSelect(index)}
+                  onClick={() =>
+                    handleOptionSelect(option.id)
+                  }
                 >
-                  {option}
+                  {option.text}
                 </button>
               ))}
             </div>
@@ -197,15 +219,21 @@ export default function Quiz() {
         <div className="quiz-navigation">
           <Button
             variant="outline"
-            onClick={() => changeQuestion(currentIndex - 1)}
+            onClick={() =>
+              changeQuestion(currentIndex - 1)
+            }
             disabled={currentIndex === 0}
           >
             Prev
           </Button>
 
           <Button
-            onClick={() => changeQuestion(currentIndex + 1)}
-            disabled={currentIndex === quiz.questions.length - 1}
+            onClick={() =>
+              changeQuestion(currentIndex + 1)
+            }
+            disabled={
+              currentIndex === quiz.questions.length - 1
+            }
           >
             Next
           </Button>
@@ -214,7 +242,9 @@ export default function Quiz() {
         <div className="quiz-submit">
           <Button
             variant="safe"
-            onClick={() => setShowSubmitModal(true)}
+            onClick={() =>
+              setShowSubmitModal(true)
+            }
             disabled={submitted}
             fullWidth
           >
@@ -227,13 +257,16 @@ export default function Quiz() {
             <div className="modal">
               <h2>Submit Quiz?</h2>
               <p>
-                You won’t be able to change your answers after submitting.
+                You won’t be able to change your
+                answers after submitting.
               </p>
 
               <div className="modal-actions">
                 <Button
                   variant="outline"
-                  onClick={() => setShowSubmitModal(false)}
+                  onClick={() =>
+                    setShowSubmitModal(false)
+                  }
                 >
                   Cancel
                 </Button>

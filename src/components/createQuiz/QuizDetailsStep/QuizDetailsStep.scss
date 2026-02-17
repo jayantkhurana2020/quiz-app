@@ -1,0 +1,65 @@
+.quiz-details-step {
+  max-width: 800px;
+  margin: auto;
+  padding: 40px;
+  background: var(--glass-surface);
+  border: 1px solid var(--glass-surface-border);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  box-shadow: var(--modal-shadow);
+  color: var(--text-primary);
+
+  .step-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+  }
+
+  .step-subtitle {
+    margin-bottom: 30px;
+    color: var(--text-secondary);
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+
+    label {
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    input,
+    textarea,
+    select {
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--glass-bg);
+      color: var(--text-primary);
+      outline: none;
+      transition: border 0.25s ease, box-shadow 0.25s ease;
+
+      &:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px var(--primary-soft);
+      }
+    }
+
+    .error {
+      font-size: 13px;
+      color: var(--danger);
+      margin-top: 5px;
+    }
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+}
+ 

@@ -8,24 +8,28 @@
     "questions": [
       {
         "id": 1,
-        "question": "Which keyword is used to declare a variable?",
-        "options": ["var", "let", "const", "All of these"],
-        "correctAnswer": 3
+        "questionText": "Which keyword is used to declare a variable?",
+        "type": "single",
+        "options": [
+          { "id": "1a", "text": "var", "isCorrect": false },
+          { "id": "1b", "text": "let", "isCorrect": false },
+          { "id": "1c", "text": "const", "isCorrect": false },
+          { "id": "1d", "text": "All of these", "isCorrect": true }
+        ]
       },
       {
         "id": 2,
-        "question": "Which method converts JSON to an object?",
+        "questionText": "Which method converts JSON to an object?",
+        "type": "single",
         "options": [
-          "JSON.parse()",
-          "JSON.stringify()",
-          "JSON.convert()",
-          "JSON.toObject()"
-        ],
-        "correctAnswer": 0
+          { "id": "2a", "text": "JSON.parse()", "isCorrect": true },
+          { "id": "2b", "text": "JSON.stringify()", "isCorrect": false },
+          { "id": "2c", "text": "JSON.convert()", "isCorrect": false },
+          { "id": "2d", "text": "JSON.toObject()", "isCorrect": false }
+        ]
       }
     ]
   },
-
   {
     "id": "GK-Easy",
     "title": "General Knowledge Quiz",
@@ -35,24 +39,28 @@
     "questions": [
       {
         "id": 1,
-        "question": "Which element is said to keep bones strong?",
-        "options": ["Carbon", "Nitrogen", "Calcium", "Oxygen"],
-        "correctAnswer": 2
+        "questionText": "Which element is said to keep bones strong?",
+        "type": "single",
+        "options": [
+          { "id": "1a", "text": "Carbon", "isCorrect": false },
+          { "id": "1b", "text": "Nitrogen", "isCorrect": false },
+          { "id": "1c", "text": "Calcium", "isCorrect": true },
+          { "id": "1d", "text": "Oxygen", "isCorrect": false }
+        ]
       },
       {
         "id": 2,
-        "question": "In which country is the Taj Mahal situated?",
+        "questionText": "In which country is the Taj Mahal situated?",
+        "type": "single",
         "options": [
-          "Japan",
-          "India",
-          "Germany",
-          "Switzerland"
-        ],
-        "correctAnswer": 1
+          { "id": "2a", "text": "Japan", "isCorrect": false },
+          { "id": "2b", "text": "India", "isCorrect": true },
+          { "id": "2c", "text": "Germany", "isCorrect": false },
+          { "id": "2d", "text": "Switzerland", "isCorrect": false }
+        ]
       }
     ]
   },
-
   {
     "id": "Cashier-Trivia",
     "title": "Cashier Trivia Quiz",
@@ -62,31 +70,36 @@
     "questions": [
       {
         "id": 1,
-        "question": "Cashiers should always provide friendly",
-        "options": ["Denomination", "Orientation", "Customer service", "Money"],
-        "correctAnswer": 2
+        "questionText": "Cashiers should always provide friendly",
+        "type": "single",
+        "options": [
+          { "id": "1a", "text": "Denomination", "isCorrect": false },
+          { "id": "1b", "text": "Orientation", "isCorrect": false },
+          { "id": "1c", "text": "Customer service", "isCorrect": true },
+          { "id": "1d", "text": "Money", "isCorrect": false }
+        ]
       },
       {
         "id": 2,
-        "question": "A customer's order total is $2.06  The customer give you $100.00  What will the amount of the change you will give back?",
+        "questionText": "A customer's order total is $2.06  The customer give you $100.00  What will the amount of the change you will give back?",
+        "type": "single",
         "options": [
-          "$92.94",
-          "$96.84",
-          "$98.00",
-          "$97.94"
-        ],
-        "correctAnswer": 3
+          { "id": "2a", "text": "$92.94", "isCorrect": false },
+          { "id": "2b", "text": "$96.84", "isCorrect": false },
+          { "id": "2c", "text": "$98.00", "isCorrect": false },
+          { "id": "2d", "text": "$97.94", "isCorrect": true }
+        ]
       },
       {
         "id": 3,
-        "question": "Customers who want to pay for their products should go to the",
+        "questionText": "Customers who want to pay for their products should go to the",
+        "type": "single",
         "options": [
-          "Charge out",
-          "Checkout",
-          "Cash advance",
-          "Loan"
-        ],
-        "correctAnswer": 1
+          { "id": "3a", "text": "Charge out", "isCorrect": false },
+          { "id": "3b", "text": "Checkout", "isCorrect": true },
+          { "id": "3c", "text": "Cash advance", "isCorrect": false },
+          { "id": "3d", "text": "Loan", "isCorrect": false }
+        ]
       }
     ]
   }
