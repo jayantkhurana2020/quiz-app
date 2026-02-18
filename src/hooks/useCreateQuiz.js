@@ -153,6 +153,10 @@ export const useCreateQuiz = () => {
       if (quiz.duration <= 0) {
         newErrors.duration = "Duration must be greater than 0";
       }
+
+      if(!quiz.description .trim()) {
+        newErrors.description = "Description is required";
+      }
     }
 
     // STEP 2 → Questions

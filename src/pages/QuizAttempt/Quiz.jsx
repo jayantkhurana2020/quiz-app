@@ -27,9 +27,7 @@ export default function Quiz() {
 
   const endTimeRef = useRef(null);
 
-  if (!quiz) {
-    return <p className="quiz-error">Quiz not found</p>;
-  }
+  if (!quiz) return <p className="quiz-error">Quiz not found</p>;
 
   const currentQuestion = quiz.questions[currentIndex];
 
@@ -39,8 +37,12 @@ export default function Quiz() {
   const totalSeconds = quiz.duration * 60;
   const timerProgressPercent = (timeLeft / totalSeconds) * 100;
 
-  const unansweredCount =
-    quiz.questions.length - Object.keys(answers).length;
+  const unansweredCount = quiz.questions.filter((q) => {
+    const answer = answers[q.id];
+    if (!answer) return true;
+    if (q.type === "multiple" && answer.length === 0) return true;
+    return false;
+  }).length;
 
   useEffect(() => {
     if (!quiz || submitted) return;
@@ -57,9 +59,7 @@ export default function Quiz() {
 
       setTimeLeft(remaining);
 
-      if (remaining === 120) {
-        toast.warning("Only 2 minutes left!");
-      }
+      if (remaining === 10) toast.warning("Only 10 seconds left!");
 
       if (remaining === 0) {
         clearInterval(interval);
@@ -70,27 +70,60 @@ export default function Quiz() {
     return () => clearInterval(interval);
   }, [quiz, submitted]);
 
-  // ✅ Updated to use option.id
-  function handleOptionSelect(optionId) {
-    setAnswers((prev) => ({
-      ...prev,
-      [currentQuestion.id]: optionId,
-    }));
-  }
+  const handleAnswerChange = (question, optionId) => {
+    setAnswers((prev) => {
+      if (question.type === "single") {
+        return { ...prev, [question.id]: optionId };
+      }
 
-  // ✅ Updated scoring logic
+      if (question.type === "multiple") {
+        const existing = prev[question.id] || [];
+        const alreadySelected = existing.includes(optionId);
+
+        const updated = alreadySelected
+          ? existing.filter((id) => id !== optionId)
+          : [...existing, optionId];
+
+        return { ...prev, [question.id]: updated };
+      }
+
+      return prev;
+    });
+  };
+
   function calculateScore() {
     let score = 0;
 
     quiz.questions.forEach((question) => {
-      const selectedOptionId = answers[question.id];
+      const userAnswer = answers[question.id];
+      if (!userAnswer) return;
 
-      const correctOption = question.options.find(
-        (option) => option.isCorrect
-      );
+      if (question.type === "single") {
+        const correctOption = question.options.find(
+          (o) => o.isCorrect
+        );
 
-      if (selectedOptionId === correctOption?.id) {
-        score += quiz.pointsPerQuestion || 1;
+        if (userAnswer === correctOption?.id) {
+          score += quiz.pointsPerQuestion || 1;
+        }
+      }
+
+      if (question.type === "multiple") {
+        const correctOptions = question.options
+          .filter((o) => o.isCorrect)
+          .map((o) => o.id);
+
+        const selectedOptions = userAnswer || [];
+
+        const isCorrect =
+          selectedOptions.length === correctOptions.length &&
+          correctOptions.every((id) =>
+            selectedOptions.includes(id)
+          );
+
+        if (isCorrect) {
+          score += quiz.pointsPerQuestion || 1;
+        }
       }
     });
 
@@ -107,6 +140,7 @@ export default function Quiz() {
         score,
         total: quiz.questions.length,
         quizId: quiz.id,
+        answers
       },
     });
   }
@@ -122,6 +156,7 @@ export default function Quiz() {
         score,
         total: quiz.questions.length,
         quizId: quiz.id,
+        answers
       },
     });
   }
@@ -146,8 +181,6 @@ export default function Quiz() {
   return (
     <Container>
       <div className="quiz-wrapper">
-
-        {/* Progress Bar */}
         <div className="quiz-progress-bar-wrapper">
           <div
             className="quiz-progress-bar"
@@ -186,32 +219,31 @@ export default function Quiz() {
         </div>
 
         <Card padding="lg">
-          <div
-            className={`question-container ${
-              isAnimating ? "fade-out" : "fade-in"
-            }`}
-          >
-            {/* ✅ Updated question field */}
+          <div className={`question-container ${isAnimating ? "fade-out" : "fade-in"}`}>
             <h2 className="question-text">
               {currentQuestion.questionText}
             </h2>
 
             <div className="options-grid">
-              {currentQuestion.options.map((option) => (
-                <button
-                  key={option.id}
-                  className={`option-block ${
-                    answers[currentQuestion.id] === option.id
-                      ? "selected"
-                      : ""
-                  }`}
-                  onClick={() =>
-                    handleOptionSelect(option.id)
-                  }
-                >
-                  {option.text}
-                </button>
-              ))}
+              {currentQuestion.options.map((option) => {
+                const selected =
+                  currentQuestion.type === "single"
+                    ? answers[currentQuestion.id] === option.id
+                    : (answers[currentQuestion.id] || []).includes(option.id);
+
+                return (
+                  <button
+                    key={option.id}
+                    type="button"
+                    className={`option-block ${selected ? "selected" : ""}`}
+                    onClick={() =>
+                      handleAnswerChange(currentQuestion, option.id)
+                    }
+                  >
+                    {option.text}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </Card>
@@ -219,21 +251,15 @@ export default function Quiz() {
         <div className="quiz-navigation">
           <Button
             variant="outline"
-            onClick={() =>
-              changeQuestion(currentIndex - 1)
-            }
+            onClick={() => changeQuestion(currentIndex - 1)}
             disabled={currentIndex === 0}
           >
             Prev
           </Button>
 
           <Button
-            onClick={() =>
-              changeQuestion(currentIndex + 1)
-            }
-            disabled={
-              currentIndex === quiz.questions.length - 1
-            }
+            onClick={() => changeQuestion(currentIndex + 1)}
+            disabled={currentIndex === quiz.questions.length - 1}
           >
             Next
           </Button>
@@ -242,9 +268,7 @@ export default function Quiz() {
         <div className="quiz-submit">
           <Button
             variant="safe"
-            onClick={() =>
-              setShowSubmitModal(true)
-            }
+            onClick={() => setShowSubmitModal(true)}
             disabled={submitted}
             fullWidth
           >

@@ -17,8 +17,9 @@
 .step-indicator {
   display: flex;
   justify-content: center;
+    flex-wrap: wrap;
+
   gap: 30px;
-  margin-bottom: 40px;
   position: relative;
 
   span {
@@ -99,4 +100,14 @@
     box-shadow: 0 10px 25px var(--primary-glow);
     transform: translateY(-2px);
   }
+}
+
+.create-quiz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 30px;
+  flex-wrap: wrap;
+
+  margin-bottom: 40px;
 }

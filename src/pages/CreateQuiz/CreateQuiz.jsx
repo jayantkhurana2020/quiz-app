@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import QuizDetailsStep from "../../components/createQuiz/QuizDetailsStep/QuizDetailsStep.jsx";
 import QuestionsStep from "../../components/createQuiz/QuestionsStep/QuestionsStep.jsx";
 import ReviewStep from "../../components/createQuiz/ReviewStep/ReviewStep.jsx";
+import Button from "../../components/ui/Button/Button.jsx";
 
 const CreateQuiz = () => {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const CreateQuiz = () => {
     const success = submitQuiz();
 
     if (success) {
-      alert("Quiz created successfully!");
+      toast.success("Quiz created successfully!");
       navigate("/");
     }
   };
@@ -51,12 +52,22 @@ const CreateQuiz = () => {
     <section className="create-quiz-page">
       <div className="create-quiz-container">
         
-        {/* Step Indicator */}
-        <div className="step-indicator">
-          <span className={step === 1 ? "active" : ""}>1. Details</span>
-          <span className={step === 2 ? "active" : ""}>2. Questions</span>
-          <span className={step === 3 ? "active" : ""}>3. Review</span>
+        <div className="create-quiz-header">
+          {/* Step Indicator */}
+          <div className="step-indicator">
+            <span className={step === 1 ? "active" : ""}>1. Details</span>
+            <span className={step === 2 ? "active" : ""}>2. Questions</span>
+            <span className={step === 3 ? "active" : ""}>3. Review</span>
+          </div>
+
+          <Button
+            variant="primary"
+            onClick={() => navigate("/")}
+          >
+            Back to home
+          </Button>
         </div>
+
 
         {/* Step Content */}
         <div className="step-content">

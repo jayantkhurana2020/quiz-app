@@ -1,6 +1,9 @@
+@use "../../../styles/mixins" as *;
+
 .quiz-details-step {
+  width: 100%;
   max-width: 800px;
-  margin: auto;
+  margin: 40px auto;
   padding: 40px;
   background: var(--glass-surface);
   border: 1px solid var(--glass-surface-border);
@@ -35,6 +38,7 @@
     input,
     textarea,
     select {
+      width: 100%;
       padding: 12px 14px;
       border-radius: 12px;
       border: 1px solid var(--border);
@@ -62,4 +66,57 @@
     gap: 20px;
   }
 }
- 
+
+/* =========================
+   Tablet (≤ 992px)
+========================= */
+@media (max-width: 992px) {
+  .quiz-details-step {
+    padding: 30px;
+
+    .step-title {
+      font-size: 24px;
+    }
+
+    .form-row {
+      gap: 16px;
+    }
+  }
+}
+
+
+@include respond(tablet) {
+  .quiz-details-step {
+    padding: 24px;
+    border-radius: 16px;
+
+    .step-title {
+      font-size: 22px;
+    }
+
+    .step-subtitle {
+      margin-bottom: 20px;
+    }
+
+    .form-row {
+      grid-template-columns: 1fr; // stack fields
+      gap: 14px;
+    }
+  }
+}
+
+@include respond(mobile) {
+  .quiz-details-step {
+    padding: 18px;
+
+    .step-title {
+      font-size: 20px;
+    }
+
+    input,
+    textarea,
+    select {
+      font-size: 14px;
+    }
+  }
+}

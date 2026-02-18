@@ -41,7 +41,7 @@ const QuestionsStep = ({
         </p>
       )}
 
-      {latestErrors.questions && (<p className="error-text" >{latestErrors.questions}</p>)}
+      {latestErrors.questions && (<p className="error-text"> {latestErrors.questions} </p>)}
 
       {quiz.questions.map((question, qIndex) => (
         <div key={question.id} className="question-card">
@@ -77,9 +77,11 @@ const QuestionsStep = ({
 
           {/* question type selector */}
           <div className="question-type-selector">
-            <label >
+
+            <label className= {question.type === "single" && (`${question.type}`)} >
               <input 
                 type= "radio"
+                hidden
                 name= {`{type-${question.id}}`}
                 value= "single"
                 checked= {question.type === "single"}
@@ -88,9 +90,10 @@ const QuestionsStep = ({
             Single Correct Answer
             </label>
 
-            <label>
+            <label className= {question.type === "multiple" && (`${question.type}`)}>
               <input
                 type="radio"
+                hidden
                 name={`type-${question.id}`}
                 value="multiple"
                 checked={question.type === "multiple"}

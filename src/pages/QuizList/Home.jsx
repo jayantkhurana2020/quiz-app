@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import seedQuizzes from "../../data/quizzes.json";
 import { getStoredQuizzes } from "../../utils/storage.js";
 import Card from "../../components/ui/Card/Card.jsx";
 import InstructionsModal from "../../components/InstructionsModal/InstructionsModal";
+import Button from "../../components/ui/Button/Button.jsx";
 import "./Home.scss";
 
 export default function Home() {
@@ -13,11 +14,20 @@ export default function Home() {
   const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const quizzes = [...seedQuizzes, ...getStoredQuizzes()];
+  const [filteredQuizzes, setFilteredQuizzes] = useState(quizzes);
 
-  const filteredQuizzes = quizzes.filter((quiz) =>
-    quiz.title.toLowerCase().includes(search.toLowerCase()) ||
-    quiz.description.toLowerCase().includes(search.toLowerCase())
-  );
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+       const filtered = quizzes.filter((quiz) =>
+        quiz.title.toLowerCase().includes(search.toLowerCase()) ||
+        quiz.description.toLowerCase().includes(search.toLowerCase())
+      );
+
+      setFilteredQuizzes(filtered);
+    }, 1000)
+
+    return () => clearTimeout(timeoutId);
+  }, [search, quizzes]);
 
   return (
     <div className="home-page">
@@ -29,6 +39,16 @@ export default function Home() {
           <p className="hero-subtitle">
             Interactive quizzes designed to challenge your mind and make learning exciting.
           </p>
+          
+          <div>
+            <Button
+              variant="primary"
+              type = "button"
+              onClick={() => navigate("/create-quiz")}
+            >
+              Create Quiz
+            </Button>
+          </div>
 
           <div className="quiz-searh-bar-wrapper">
             <input
@@ -59,7 +79,10 @@ export default function Home() {
                     }}
                   >
                     <h3>{quiz.title}</h3>
-                    <p>{quiz.description}</p>
+                    {quiz.description.length >= 90 
+                      ? <p>{quiz.description.slice(0, 90)}...</p>
+                      : <p>{quiz.description}</p>
+                    }                    
 
                     <div className="card-footer">
                       <button className="start-btn">

@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./QuizDetailsStep.scss";
 
 const QuizDetailsStep = ({ quiz, errors, updateQuizField }) => {
+
+  const [latestErrors, setLatestErrors] = useState({...errors});
+  
+  useEffect(() => {
+    setLatestErrors({...errors});
+  }, [errors]);
+
   return (
     <div className="quiz-details-step">
       <h2 className="step-title">Quiz Details</h2>
@@ -15,9 +22,10 @@ const QuizDetailsStep = ({ quiz, errors, updateQuizField }) => {
           type="text"
           value={quiz?.title || ""}
           onChange={(e) => updateQuizField("title", e.target.value)}
+          onClick={() => setLatestErrors({})}
           placeholder="Enter quiz title"
         />
-        {errors?.title && <span className="error">{errors.title}</span>}
+        {latestErrors?.title && <span className="error">{latestErrors.title}</span>}
       </div>
 
       <div className="form-group">
@@ -25,11 +33,12 @@ const QuizDetailsStep = ({ quiz, errors, updateQuizField }) => {
         <textarea
           value={quiz?.description || ""}
           onChange={(e) => updateQuizField("description", e.target.value)}
+          onClick={() => setLatestErrors({})}
           placeholder="Write a short description..."
           rows={4}
         />
-        {errors?.description && (
-          <span className="error">{errors.description}</span>
+        {latestErrors?.description && (
+          <span className="error">{latestErrors.description}</span>
         )}
       </div>
 
@@ -59,14 +68,15 @@ const QuizDetailsStep = ({ quiz, errors, updateQuizField }) => {
       </div>
 
       <div className="form-group">
-        <label>Time Limit (minutes)</label>
+        <label>Time Limit (in minutes)</label>
         <input
           type="number"
-          value={quiz?.duration || 0}
+          value={quiz?.duration}
           onChange={(e) => updateQuizField("duration", e.target.value)}
-          min="1"
+          onClick={() => setLatestErrors({})}
+          min="1" 
         />
-        {errors?.duration && <span className="error">{errors.duration}</span>}
+        {latestErrors?.duration && <span className="error">{latestErrors.duration}</span>}
       </div>
     </div>
   );
