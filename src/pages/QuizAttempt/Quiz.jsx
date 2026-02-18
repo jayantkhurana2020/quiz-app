@@ -190,9 +190,8 @@ export default function Quiz() {
 
         <div className="quiz-top">
           <h1 className="quiz-title">{quiz.title}</h1>
-
           <div className="quiz-meta">
-            <span>{unansweredCount} Unanswered</span>
+            <span><span className={unansweredCount > 0 ? `unanswered-count-danger` : `unanswered-count-safe`}>{unansweredCount}</span>{" "}Unanswered</span>
             <span>
               Question {currentIndex + 1} of {quiz.questions.length}
             </span>
@@ -223,6 +222,8 @@ export default function Quiz() {
             <h2 className="question-text">
               {currentQuestion.questionText}
             </h2>
+
+            {currentQuestion.type === "multiple" && ( <h5>Multiple options can be selected.</h5> )}
 
             <div className="options-grid">
               {currentQuestion.options.map((option) => {

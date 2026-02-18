@@ -24,6 +24,17 @@
   align-items: center;
   font-size: 14px;
   color: var(--text-secondary);
+
+  span {
+    color: var(--primary);
+  }
+
+  .unanswered-count-danger {
+    color: var(--danger);
+  }
+  .unanswered-count-safe {
+    color: var(--safe);
+  }
 }
 
 .quiz-timer {
@@ -43,6 +54,11 @@
 
 .question-container {
   transition: opacity 0.2s ease, transform 0.2s ease;
+
+  h5 {
+    color: var(--primary);
+    margin: 10px;
+  }
 }
 
 .question-container.fade-in {

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./QuestionsStep.scss";
+import { toast } from "react-toastify";
 
 const QuestionsStep = ({
   quiz,
@@ -14,25 +15,25 @@ const QuestionsStep = ({
 }) => {
 
   const [latestErrors, setLatestErrors] = useState({...errors});
+  const bottomRef = useRef(null);
 
   useEffect(() => {
     setLatestErrors({...errors});
   }, [errors]);
 
+  useEffect(() => {
+    if (quiz.questions.length > 0) {
+      bottomRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+  }, [quiz.questions.length]);
+
   return (
     <div className="questions-step">
       <div className="questions-header">
         <h2>Build Questions</h2>
-        <button
-          type="button"
-          className="add-question-btn"
-          onClick={ () => {
-            addQuestion(),
-            setLatestErrors({})
-          }}
-        >
-          + Add Question
-        </button>
       </div>
 
       {quiz.questions.length === 0 && (
@@ -202,6 +203,19 @@ const QuestionsStep = ({
           {question.options.length === 5 && (<p>Maximum 5 options are allowed</p>)}
         </div>
       ))}
+
+      <div ref={bottomRef} />
+      <button
+          type="button"
+          className="add-question-btn"
+          onClick={ () => {
+            addQuestion(),
+            setLatestErrors({})
+            toast.success("Question added successfully")
+          }}
+        >
+          + Add Question
+        </button>
     </div>
   );
 };
