@@ -11,6 +11,7 @@ import Button from "../../components/ui/Button/Button.jsx";
 const CreateQuiz = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
+  const [editQuestionIndex, setEditQuestionIndex] = useState(null);
 
   const {
     quiz,
@@ -37,6 +38,11 @@ const CreateQuiz = () => {
 
   const prevStep = () => {
     if (step > 1) setStep((prev) => prev - 1);
+  };
+
+  const handleEditQuestion = (index) => {
+    setEditQuestionIndex(index);
+    setStep(2);
   };
 
   const handleSubmit = () => {
@@ -90,11 +96,12 @@ const CreateQuiz = () => {
               deleteOption={deleteOption}
               updateOption={updateOption}
               toggleCorrectAnswer={toggleCorrectAnswer}
+              editQuestionIndex = {editQuestionIndex}
             />
           )}
 
           {step === 3 && (
-            <ReviewStep quiz={quiz} />
+            <ReviewStep quiz={quiz} onEditQuestion={handleEditQuestion} />
           )}
         </div>
 

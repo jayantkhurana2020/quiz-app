@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import seedQuizzes from "../../data/quizzes.json";
 import { getStoredQuizzes } from "../../utils/storage.js";
 import Card from "../../components/ui/Card/Card.jsx";
-import InstructionsModal from "../../components/InstructionsModal/InstructionsModal";
+import InstructionsModal from "../../components/InstructionsModal/InstructionsModal.jsx";
 import Button from "../../components/ui/Button/Button.jsx";
 import "./Home.scss";
 
@@ -102,7 +102,6 @@ export default function Home() {
           open={showModal}
           onClose={() => setShowModal(false)}
           onStart={() => {
-            sessionStorage.setItem("quizActive", "true");
             setShowModal(false);
             navigate(`/quiz/${selectedQuiz.id}`);
           }}

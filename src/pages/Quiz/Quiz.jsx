@@ -3,14 +3,13 @@ import { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
 import seedQuizzes from "../../data/quizzes.json";
 import { getStoredQuizzes } from "../../utils/storage.js";
-import useQuizGuard from "../../hooks/useQuizGuard.js";
 import Container from "../../components/ui/Container/Container.jsx";
-import Card from "../../components/ui/Card/Card";
-import Button from "../../components/ui/Button/Button";
+import Card from "../../components/ui/Card/Card.jsx";
+import Button from "../../components/ui/Button/Button.jsx";
 import "./Quiz.scss";
+import { saveProgress, loadProgress, clearProgress } from "../../utils/quizProgress.js";
 
 export default function Quiz() {
-  useQuizGuard();
 
   const { quizId } = useParams();
   const navigate = useNavigate();
@@ -22,15 +21,83 @@ export default function Quiz() {
   const [answers, setAnswers] = useState({});
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(quiz ? quiz.duration * 60 : 0);
+  const [timeLeft, setTimeLeft] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-
-  const endTimeRef = useRef(null);
+  const [endTime, setEndTime] = useState(null);
 
   if (!quiz) return <p className="quiz-error">Quiz not found</p>;
 
-  const currentQuestion = quiz.questions[currentIndex];
+  // Initialize or Resume Quiz
+  useEffect(() => {
+    if (!quiz) return;
 
+    const existing = loadProgress(quiz.id);
+
+    if (existing) {
+      const remaining = Math.floor(
+        (existing.endTime - Date.now()) / 1000
+      );
+
+      if (remaining > 0) {
+        setAnswers(existing.answers || {});
+        setCurrentIndex(existing.currentIndex || 0);
+        setEndTime(existing.endTime);
+        setTimeLeft(remaining);
+        return;
+      } else {
+        clearProgress(quiz.id);
+      }
+    }
+
+    // Fresh start
+    const newEndTime =
+      Date.now() + quiz.duration * 60 * 1000;
+
+    setEndTime(newEndTime);
+    setTimeLeft(quiz.duration * 60);
+  }, [quiz.id]);
+
+
+  // Timer Countdown
+  useEffect(() => {
+    if (!endTime || submitted) return;
+
+    const interval = setInterval(() => {
+      const remaining = Math.floor(
+        (endTime - Date.now()) / 1000
+      );
+
+      if (remaining <= 0) {
+        clearInterval(interval);
+        handleAutoSubmit();
+        return;
+      }
+
+      if (remaining === 10) {
+        toast.warning("Only 10 seconds left!");
+      }
+
+      setTimeLeft(remaining);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [endTime, submitted]);
+
+  // Auto Save Progress
+  useEffect(() => {
+    if (!endTime) return;
+
+    saveProgress({
+      quizId: quiz.id,
+      endTime,
+      answers,
+      currentIndex,
+    });
+  }, [answers, currentIndex, endTime, quiz.id]);
+
+
+
+  const currentQuestion = quiz.questions[currentIndex];
   const questionsProgressPercentage =
     ((currentIndex + 1) / quiz.questions.length) * 100;
 
@@ -43,32 +110,6 @@ export default function Quiz() {
     if (q.type === "multiple" && answer.length === 0) return true;
     return false;
   }).length;
-
-  useEffect(() => {
-    if (!quiz || submitted) return;
-
-    if (!endTimeRef.current) {
-      endTimeRef.current = Date.now() + quiz.duration * 60 * 1000;
-    }
-
-    const interval = setInterval(() => {
-      const remaining = Math.max(
-        0,
-        Math.floor((endTimeRef.current - Date.now()) / 1000)
-      );
-
-      setTimeLeft(remaining);
-
-      if (remaining === 10) toast.warning("Only 10 seconds left!");
-
-      if (remaining === 0) {
-        clearInterval(interval);
-        handleAutoSubmit();
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [quiz, submitted]);
 
   const handleAnswerChange = (question, optionId) => {
     setAnswers((prev) => {
@@ -134,6 +175,7 @@ export default function Quiz() {
     const score = calculateScore();
     setSubmitted(true);
     sessionStorage.removeItem("quizActive");
+    clearProgress(quiz.id);
 
     navigate("/result", {
       state: {
@@ -150,6 +192,7 @@ export default function Quiz() {
     setSubmitted(true);
     setShowSubmitModal(false);
     sessionStorage.removeItem("quizActive");
+    clearProgress(quiz.id);
 
     navigate("/result", {
       state: {

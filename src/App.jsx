@@ -3,9 +3,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Layout from "./components/layout/Layout.jsx";
 
-import Home from "./pages/QuizList/Home.jsx";
-import Quiz from "./pages/QuizAttempt/Quiz.jsx";
-import Result from "./pages/QuizResult/Result.jsx";
+import Home from "./pages/Home/Home.jsx";
+import Quiz from "./pages/Quiz/Quiz.jsx";
+import Result from "./pages/Result/Result.jsx";
 import CreateQuiz from "./pages/CreateQuiz/CreateQuiz.jsx";
 
 function App() {

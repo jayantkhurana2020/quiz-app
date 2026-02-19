@@ -146,6 +146,7 @@ export const useCreateQuiz = () => {
 
     // STEP 1 → Quiz Info
     if (step === 1) {
+    
       if (!quiz.title.trim()) {
         newErrors.title = "Title is required";
       }
@@ -157,6 +158,7 @@ export const useCreateQuiz = () => {
       if(!quiz.description .trim()) {
         newErrors.description = "Description is required";
       }
+
     }
 
     // STEP 2 → Questions

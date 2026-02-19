@@ -38,12 +38,19 @@
   padding: 25px;
   border-radius: 18px;
   margin-bottom: 30px;
+  border: 2px solid transparent;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 
-  p {
-    margin-top: 10px;
-    color: var(--danger);
+  &.highlight {
+    border-color: blueviolet;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
   }
+
+  .max-options {
+    margin-top: 10px;
+    color: var(--safe);
+  }
+
 }
 
 .question-top {
@@ -99,13 +106,10 @@
 
 .question-type-selector {
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
   gap: 10px;
 
-  max-width: 300px;
-  min-width: 150px;
-
+  max-width: inherit;
   margin-bottom: 10px;
 
   label {

@@ -17,7 +17,6 @@ function Result() {
   const isPassed = percentage >= passThreshold;
 
   function handleReattempt() {
-    sessionStorage.setItem("quizActive", "true");
     navigate(`/quiz/${quizId}`);
   }
 

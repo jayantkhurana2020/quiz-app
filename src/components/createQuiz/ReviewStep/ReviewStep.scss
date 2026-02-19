@@ -54,10 +54,18 @@
   backdrop-filter: blur(20px);
 }
 
-.question-title {
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
   margin-bottom: 15px;
-  color: var(--text-primary);
+
+  .question-title {
+    color: var(--text-primary);
+  }
 }
+
 
 .review-options {
   display: flex;
@@ -77,4 +85,25 @@
 .review-option.correct {
   background: var(--primary-soft);
   border: 1px solid var(--primary);
+}
+
+.edit-btn {
+  background: var(--surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+
+  &:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
 }

@@ -11,11 +11,14 @@ const QuestionsStep = ({
   addOption,
   deleteOption,
   updateOption,
-  toggleCorrectAnswer
+  toggleCorrectAnswer,
+  editQuestionIndex
 }) => {
 
   const [latestErrors, setLatestErrors] = useState({...errors});
+  const [highlightIndex, setHighlightIndex] = useState(null);
   const bottomRef = useRef(null);
+  const questionRefs = useRef({});
 
   useEffect(() => {
     setLatestErrors({...errors});
@@ -29,6 +32,22 @@ const QuestionsStep = ({
       });
     }
   }, [quiz.questions.length]);
+
+  useEffect(() => {
+    if (editQuestionIndex !== null && questionRefs.current[editQuestionIndex]){
+      questionRefs.current[editQuestionIndex].scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+      });
+    }
+  }, [editQuestionIndex]);
+
+  useEffect(() => {
+    if (editQuestionIndex !== null) {
+      setHighlightIndex(editQuestionIndex);
+      setTimeout(() => setHighlightIndex(null), 1500);
+    }
+  }, [editQuestionIndex]);
 
   return (
     <div className="questions-step">
@@ -45,7 +64,11 @@ const QuestionsStep = ({
       {latestErrors.questions && (<p className="error-text"> {latestErrors.questions} </p>)}
 
       {quiz.questions.map((question, qIndex) => (
-        <div key={question.id} className="question-card">
+        <div key={question.id} className={`question-card ${highlightIndex === qIndex ? "highlight" : ""}`}
+          ref={(el) => (
+            questionRefs.current[qIndex] = el
+          )}
+        >
 
           {/* Question Header */}
           <div className="question-top">
@@ -53,7 +76,10 @@ const QuestionsStep = ({
             <button
               type="button"
               className="delete-question-btn"
-              onClick={() => deleteQuestion(question.id)}
+              onClick={() => {
+                deleteQuestion(question.id)
+                toast.error("Question removed successfully")
+              }}
             >
               ✕
             </button>
@@ -200,7 +226,7 @@ const QuestionsStep = ({
               + Add Option
             </button>
           )}
-          {question.options.length === 5 && (<p>Maximum 5 options are allowed</p>)}
+          {question.options.length === 5 && (<p className="max-options">Maximum 5 options are allowed. You are good to go.</p>)}
         </div>
       ))}
 
