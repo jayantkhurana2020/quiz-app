@@ -10,10 +10,6 @@
   margin: auto;
 }
 
-/* ============================= */
-/* Step Indicator */
-/* ============================= */
-
 .step-indicator {
   display: flex;
   justify-content: center;
@@ -41,17 +37,16 @@
   }
 }
 
-/* ============================= */
-/* Step Content Wrapper */
-/* ============================= */
-
 .step-content {
   margin-bottom: 40px;
-}
 
-/* ============================= */
-/* Navigation Buttons */
-/* ============================= */
+  .create-quiz-loading {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    animation: fadeIn 0.3s ease;
+  }
+}
 
 .step-navigation {
   display: flex;
@@ -76,6 +71,17 @@
 
 .back-btn:hover {
   background: var(--glass-bg);
+}
+
+.back-btn-disabled {
+  padding: 12px 24px;
+  border-radius: 14px;
+  font-weight: 500;
+  cursor: not-allowed;
+  transition: all 0.25s ease;
+  border: 1px solid var(--border);
+  background: var(--gray-hover);
+  color: var(--text-primary);
 }
 
 .next-btn {

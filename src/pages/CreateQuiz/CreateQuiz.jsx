@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCreateQuiz } from "../../hooks/useCreateQuiz.js";
 import "./createQuiz.scss"
@@ -7,11 +7,14 @@ import QuizDetailsStep from "../../components/createQuiz/QuizDetailsStep/QuizDet
 import QuestionsStep from "../../components/createQuiz/QuestionsStep/QuestionsStep.jsx";
 import ReviewStep from "../../components/createQuiz/ReviewStep/ReviewStep.jsx";
 import Button from "../../components/ui/Button/Button.jsx";
+import SkeletonText from "../../components/ui/skeleton/SkeletonText/SkeletonText.jsx"
+import SkeletonCard from "../../components/ui/skeleton/SkeletonCard/SkeletonCard.jsx"
 
 const CreateQuiz = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [editQuestionIndex, setEditQuestionIndex] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const {
     quiz,
@@ -28,16 +31,39 @@ const CreateQuiz = () => {
     submitQuiz
   } = useCreateQuiz();
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 600);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const nextStep = () => {
     if (!validateStep(step)) {
-      toast.error("Please fix the errors before continuing");
+      if (step !== 1) {
+        toast.error("Please fix the errors before continuing");
+      }
       return;
     };
-    if (step < 3) setStep((prev) => prev + 1);
+
+    setLoading(true);
+
+    setTimeout(() => {
+      if (step < 3) setStep((prev) => prev + 1);
+      setLoading(false);
+    }, 400);
+
   };
 
   const prevStep = () => {
-    if (step > 1) setStep((prev) => prev - 1);
+
+    setLoading(true);
+
+    setTimeout(() => {
+      if (step > 1) setStep((prev) => prev - 1);
+      setLoading(false);
+    }, 400);
   };
 
   const handleEditQuestion = (index) => {
@@ -77,38 +103,59 @@ const CreateQuiz = () => {
 
         {/* Step Content */}
         <div className="step-content">
-          {step === 1 && (
-            <QuizDetailsStep
-              quiz={quiz}
-              errors={errors}
-              updateQuizField={updateQuizField}
-            />
-          )}
+          {loading ? (
+            <div className="create-quiz-loading">
+              <SkeletonText lines={1} width="40%" />
+              <SkeletonText lines={3} />
+              <SkeletonCard />
+              <SkeletonCard />
+            </div>
+          ) : (
+            <>
+              {step === 1 && (
+                <QuizDetailsStep
+                  quiz={quiz}
+                  errors={errors}
+                  updateQuizField={updateQuizField}
+                />
+              )}
 
-          {step === 2 && (
-            <QuestionsStep
-              quiz={quiz}
-              errors={errors}
-              addQuestion={addQuestion}
-              deleteQuestion={deleteQuestion}
-              updateQuestion={updateQuestion}
-              addOption={addOption}
-              deleteOption={deleteOption}
-              updateOption={updateOption}
-              toggleCorrectAnswer={toggleCorrectAnswer}
-              editQuestionIndex = {editQuestionIndex}
-            />
-          )}
+              {step === 2 && (
+                <QuestionsStep
+                  quiz={quiz}
+                  errors={errors}
+                  addQuestion={addQuestion}
+                  deleteQuestion={deleteQuestion}
+                  updateQuestion={updateQuestion}
+                  addOption={addOption}
+                  deleteOption={deleteOption}
+                  updateOption={updateOption}
+                  toggleCorrectAnswer={toggleCorrectAnswer}
+                  editQuestionIndex={editQuestionIndex}
+                />
+              )}
 
-          {step === 3 && (
-            <ReviewStep quiz={quiz} onEditQuestion={handleEditQuestion} />
+              {step === 3 && (
+                <ReviewStep
+                  quiz={quiz}
+                  onEditQuestion={handleEditQuestion}
+                />
+              )}
+            </>
           )}
         </div>
+
 
         {/* Navigation Buttons */}
         <div className="step-navigation">
           {step > 1 && (
             <button className="back-btn" onClick={prevStep}>
+              Back
+            </button>
+          )}
+
+          {step === 1 && (
+            <button className="back-btn-disabled" disabled>
               Back
             </button>
           )}

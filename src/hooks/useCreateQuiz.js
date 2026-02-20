@@ -5,6 +5,8 @@ const initialQuizState = {
   id: "",
   title: "",
   description: "",
+  category: "",
+  difficulty: "easy",
   duration: 0,
   pointsPerQuestion: 1,
   createdAt: "",
@@ -15,9 +17,7 @@ export const useCreateQuiz = () => {
   const [quiz, setQuiz] = useState(initialQuizState);
   const [errors, setErrors] = useState({});
 
-  /* ==============================
-     QUIZ FIELD UPDATE
-  ============================== */
+    //  QUIZ FIELD UPDATE
   const updateQuizField = (field, value) => {
     setQuiz((prev) => ({
       ...prev,
@@ -25,9 +25,8 @@ export const useCreateQuiz = () => {
     }));
   };
 
-  /* ==============================
-     QUESTION OPERATIONS
-  ============================== */
+    //  QUESTION OPERATIONS
+
   const addQuestion = () => {
     const newQuestion = {
       id: crypto.randomUUID(),
@@ -58,9 +57,7 @@ export const useCreateQuiz = () => {
     }));
   };
 
-  /* ==============================
-     OPTION OPERATIONS
-  ============================== */
+    //  OPTION OPERATIONS
   const addOption = (questionId) => {
     const newOption = {
       id: crypto.randomUUID(),
@@ -138,9 +135,8 @@ export const useCreateQuiz = () => {
     }));
   };
 
-  /* ==============================
-     STEP VALIDATION
-  ============================== */
+
+    //  STEP VALIDATION
   const validateStep = (step) => {
     const newErrors = {};
 
@@ -200,16 +196,13 @@ export const useCreateQuiz = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  /* ==============================
-     FULL VALIDATION (ON SUBMIT)
-  ============================== */
+
+  //  FULL VALIDATION (ON SUBMIT)
   const validateQuiz = () => {
     return validateStep(1) && validateStep(2);
   };
 
-  /* ==============================
-     SUBMIT
-  ============================== */
+    //  SUBMIT
   const submitQuiz = () => {
     if (!validateQuiz()) return false;
 

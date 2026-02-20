@@ -10,7 +10,7 @@ export default function Layout() {
   return (
     <div className="app-layout">
       <header className="app-header">
-        <h2 className="app-title" onClick={() => navigate("/")}>Quiz App</h2>
+        <h2 className="app-title" onClick={() => navigate("/")}><span>Quiz</span> App</h2>
         <button className="theme-toggle" onClick={toggleTheme}>
           {theme === "light" ? "Dark Mode" : "Light Mode"}
         </button>

@@ -111,6 +111,7 @@
 
   @include respond(tablet) {
     grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
   }
 
   @include respond(mobile) {
@@ -123,23 +124,50 @@
 }
 
 .quiz-card {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  min-height: 150px;
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 250px;
   cursor: pointer;
+
+  .title {
+    display: -webkit-box;
+    line-clamp: 1;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
+  .meta {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .description {
+    display: -webkit-box;
+    line-clamp: 1;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
+    h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    
+    p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
 }
 
-.quiz-card h3 {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.quiz-card p {
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
 
 .card-footer {
   margin-top: auto;

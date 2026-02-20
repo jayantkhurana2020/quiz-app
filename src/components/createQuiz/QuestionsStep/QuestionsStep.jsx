@@ -78,7 +78,6 @@ const QuestionsStep = ({
               className="delete-question-btn"
               onClick={() => {
                 deleteQuestion(question.id)
-                toast.error("Question removed successfully")
               }}
             >
               ✕
@@ -237,7 +236,6 @@ const QuestionsStep = ({
           onClick={ () => {
             addQuestion(),
             setLatestErrors({})
-            toast.success("Question added successfully")
           }}
         >
           + Add Question

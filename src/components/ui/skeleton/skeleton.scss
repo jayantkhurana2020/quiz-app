@@ -1,0 +1,28 @@
+.skeleton {
+  background: var(--surface);
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150px;
+  height: 100%;
+  width: 150px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--card),
+    transparent
+  );
+  animation: shimmer 1.2s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    left: 100%;
+  }
+}
