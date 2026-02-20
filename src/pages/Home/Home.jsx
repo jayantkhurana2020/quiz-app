@@ -18,6 +18,7 @@ export default function Home() {
   const [filteredQuizzes, setFilteredQuizzes] = useState(quizzes);
   const [loading, setLoading] = useState(true);
   const [isSearching, setIsSearching] = useState(false);
+  const [sortBy, setSortBy] = useState("newest");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -28,21 +29,57 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    
     setIsSearching(true);
-    
+
     const timeoutId = setTimeout(() => {
-       const filtered = quizzes.filter((quiz) =>
+      let filtered = quizzes.filter((quiz) =>
         quiz.title.toLowerCase().includes(search.toLowerCase()) ||
         quiz.description.toLowerCase().includes(search.toLowerCase())
       );
 
+      // SORTING
+      switch (sortBy) {
+        case "name":
+          filtered.sort((a, b) =>
+            a.title.localeCompare(b.title)
+          );
+          break;
+
+        case "category":
+          filtered.sort((a, b) =>
+            (a.category || "").localeCompare(b.category || "")
+          );
+          break;
+
+        case "difficulty":
+          const difficultyOrder = {
+            Easy: 1,
+            Medium: 2,
+            Hard: 3,
+          };
+
+          filtered.sort(
+            (a, b) =>
+              (difficultyOrder[a.difficulty] || 0) -
+              (difficultyOrder[b.difficulty] || 0)
+          );
+          break;
+
+        case "newest":
+        default:
+          filtered.sort(
+            (a, b) =>
+              new Date(b.createdAt || 0) -
+              new Date(a.createdAt || 0)
+          );
+      }
+
       setFilteredQuizzes(filtered);
       setIsSearching(false);
-    }, 800)
+    }, 500);
 
     return () => clearTimeout(timeoutId);
-  }, [search]);
+  }, [search, sortBy]);
 
   return (
     <div className="home-page">
@@ -74,6 +111,18 @@ export default function Home() {
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
+
+          <div className="quiz-sort-wrapper">
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+            >
+              <option id="newest" value="newest">Newest</option>
+              <option id="name" value="name">Name (A-Z)</option>
+              <option id="category" value="category">Category</option>
+              <option id="difficulty" value="difficulty">Difficulty</option>
+            </select>
+          </div>
         </div>
 
         {/* QUIZ GRID */}
@@ -87,7 +136,7 @@ export default function Home() {
               )}
 
               <ul className="quiz-list">
-                {[...filteredQuizzes].reverse().map((quiz) => (
+                {filteredQuizzes.map((quiz) => (
                   <li key={quiz.id} className="quiz-item">
                     <Card hover>
                       <div
