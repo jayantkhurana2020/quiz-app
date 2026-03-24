@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import seedQuizzes from "../../data/quizzes.json";
 import { getStoredQuizzes } from "../../utils/storage.js";

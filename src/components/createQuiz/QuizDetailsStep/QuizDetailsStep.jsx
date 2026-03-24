@@ -58,12 +58,17 @@ const QuizDetailsStep = ({ quiz, errors, updateQuizField }) => {
           <select
             value={quiz?.difficulty || ""}
             onChange={(e) => updateQuizField("difficulty", e.target.value)}
+            onClick={() => setLatestErrors({})}
           >
             <option value="">Select Difficulty</option>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
           </select>
+
+          {latestErrors?.description && (
+          <span className="error">{latestErrors.description}</span>
+        )}
         </div>
       </div>
 

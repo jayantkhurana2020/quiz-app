@@ -4,6 +4,8 @@
     "title": "JavaScript Basics",
     "description": "Test your fundamentals of JavaScript Test your fundamentals of JavaScript Test your fundamentals of JavaScript Test your fundamentals of JavaScript Test your fundamentals of JavaScript",
     "duration": 3,
+    "category": "Maths",
+    "difficulty": "Easy",
     "pointsPerQuestion": 1,
     "questions": [
       {
@@ -35,6 +37,8 @@
     "title": "General Knowledge Quiz",
     "description": "Test your General Knowledge for Know-IT-alls",
     "duration": 5,
+    "difficulty": "Easy",
+    "category": "GK",
     "pointsPerQuestion": 1,
     "questions": [
       {
@@ -66,6 +70,8 @@
     "title": "Cashier Trivia Quiz",
     "description": "Math and Vocabulary Test!",
     "duration": 1,
+    "difficulty": "Easy",
+    "category": "Uncategorized",
     "pointsPerQuestion": 1,
     "questions": [
       {

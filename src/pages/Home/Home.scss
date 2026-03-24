@@ -29,7 +29,6 @@
   max-width: 1300px;
   display: flex;
   flex-direction: column;
-  gap: 60px;
 }
 
 .hero {
@@ -124,6 +123,7 @@
 }
 
 .quiz-card {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr;
   min-height: 250px;
@@ -166,6 +166,26 @@
       color: var(--text-secondary);
       line-height: 1.6;
     }
+
+    .difficulty {
+      position: absolute;
+      right: -20px;
+      top: -19px;
+      padding: 2px 8px;
+      border-radius: 7px;
+      color: #fff;
+
+      &.easy {
+        background: var(--safe);
+      }
+      &.medium {
+        background: var(--warning);
+      }
+      &.hard {
+        background: var(--danger);
+      }
+
+    }
 }
 
 
@@ -200,7 +220,7 @@
 
 .quiz-sort-wrapper {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   margin-bottom: 1.5rem;
 
   select {
@@ -208,9 +228,9 @@
     -webkit-appearance: none;
     -moz-appearance: none;
 
-    padding: 0.30rem;
+    padding: 0.40rem 0.80rem;
     border-radius: 8px;
-    background-color: var(--primary);
+    background-color: transparent;
     font-size: 0.95rem;
     font-weight: 500;
     color: var(--text-primary);
@@ -230,9 +250,8 @@
   &::after {
     content: "▾";
     position: absolute;
-    right: px;
-    left: 52.4%;
-    top: 44%;
+    right: 5px;
+    top: 13px;
     transform: translateY(-50%);
     pointer-events: none;
     font-size: 1.35rem;

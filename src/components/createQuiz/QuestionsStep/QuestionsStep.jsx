@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./QuestionsStep.scss";
-import { toast } from "react-toastify";
 
 const QuestionsStep = ({
   quiz,

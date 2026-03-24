@@ -5,7 +5,7 @@ const initialQuizState = {
   id: "",
   title: "",
   description: "",
-  category: "",
+  category: "Uncategorized",
   difficulty: "easy",
   duration: 0,
   pointsPerQuestion: 1,
@@ -151,8 +151,12 @@ export const useCreateQuiz = () => {
         newErrors.duration = "Duration must be greater than 0";
       }
 
-      if(!quiz.description .trim()) {
+      if(!quiz.description.trim()) {
         newErrors.description = "Description is required";
+      }
+
+      if(quiz.difficulty === "") {
+        newErrors.difficulty = "Difficulty is required";
       }
 
     }

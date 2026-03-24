@@ -51,18 +51,20 @@ export default function Home() {
           );
           break;
 
-        case "difficulty":
+       case "difficulty":
           const difficultyOrder = {
-            Easy: 1,
-            Medium: 2,
-            Hard: 3,
+            easy: 1,
+            medium: 2,
+            hard: 3,
           };
 
-          filtered.sort(
-            (a, b) =>
-              (difficultyOrder[a.difficulty] || 0) -
-              (difficultyOrder[b.difficulty] || 0)
-          );
+          filtered.sort((a, b) => {
+            const aDifficulty = (a.difficulty || "").toLowerCase();
+            const bDifficulty = (b.difficulty || "").toLowerCase();
+
+            return (difficultyOrder[aDifficulty] || 0) -
+                  (difficultyOrder[bDifficulty] || 0);
+          });
           break;
 
         case "newest":
@@ -118,7 +120,7 @@ export default function Home() {
               onChange={(e) => setSortBy(e.target.value)}
             >
               <option id="newest" value="newest">Newest</option>
-              <option id="name" value="name">Name (A-Z)</option>
+              <option id="name" value="name">Name</option>
               <option id="category" value="category">Category</option>
               <option id="difficulty" value="difficulty">Difficulty</option>
             </select>
@@ -146,11 +148,17 @@ export default function Home() {
                           setShowModal(true);
                         }}
                       >
+                        <div 
+                          className={`difficulty ${quiz.difficulty.toLowerCase()}` }
+                        >
+                          <h4>{quiz.difficulty}</h4>
+                        </div>
                         <div className="meta">
                           <h2 className="title">{quiz.title}</h2>
                           <p className="description">{quiz.description}</p>
                           <p>Time Limit (in minutes): {quiz.duration}</p>
                           <p>Total Questions: {quiz.questions.length}</p>
+                          <p>Category: {quiz.category}</p>
                         </div>
 
                         <div className="card-footer">
